@@ -35,7 +35,7 @@
         tools:layout="@layout/activity_upload" />
     <fragment
         android:id="@+id/mapWithFragment"
-        android:name="com.example.bdproperties.MapWithFragment"
+        android:name="com.example.bdproperties.ui.saleregistrationfrom.MapWithFragment"
         android:label="fragment_map_with"
         tools:layout="@layout/fragment_map_with" />
     <fragment

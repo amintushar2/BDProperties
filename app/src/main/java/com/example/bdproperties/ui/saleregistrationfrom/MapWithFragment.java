@@ -1,4 +1,4 @@
-package com.example.bdproperties;
+package com.example.bdproperties.ui.saleregistrationfrom;
 
 import android.Manifest;
 import android.app.Activity;
@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -30,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bdproperties.R;
 import com.example.bdproperties.pojos.PropertySellRegistrationDataSet;
 import com.example.bdproperties.services.ApiClient;
 import com.example.bdproperties.services.RealStateApiServices;
@@ -55,6 +58,7 @@ import com.google.android.gms.tasks.Task;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -87,18 +91,16 @@ public class MapWithFragment extends Fragment {
     private GoogleMap map;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-    GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
-
 
 
     private boolean isContinue = false;
     private boolean isGPS = false;
-
+    Marker marker;
 
     Button btnUpload, btnMulUpload, btnPickImage, btnPickVideo;
+    TextView gmapLocationViewText;
     String mediaPath, mediaPath1;
-    ImageView imgView;
     MapFragment mapFragment;
     String[] mediaColumns = {MediaStore.Video.Media._ID};
     ProgressDialog progressDialog;
@@ -117,10 +119,11 @@ public class MapWithFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_map_with, container, false);
 
@@ -131,27 +134,18 @@ public class MapWithFragment extends Fragment {
         progressDialog.setMessage("Uploading...");
 
         btnMulUpload = root.findViewById(R.id.uploadMultiple);
+        gmapLocationViewText = root.findViewById(R.id.textView3);
         btnPickImage = root.findViewById(R.id.pick_img);
         str1 = root.findViewById(R.id.filename1);
         str2 = root.findViewById(R.id.filename2);
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             CheckPermission();
         } else {
-            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        // Logic to handle location object
 
-                    }
-                }
-            });
 
     }
-
 
 
         btnMulUpload.setOnClickListener(new View.OnClickListener() {
@@ -171,12 +165,9 @@ public class MapWithFragment extends Fragment {
         });
         // Prompt the user for permission.
         getLocationPermission();
-
-        // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
-
         // Get the current location of the device and set the position of the map.
-
+        getDeviceLocation();
 
         // Video must be low in Memory or need to be compressed before uploading...
         return  root;
@@ -201,8 +192,6 @@ public class MapWithFragment extends Fragment {
             Log.e("Exception: %s", e.getMessage());
         }
     }
-    
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -300,26 +289,25 @@ public class MapWithFragment extends Fragment {
             }
         });
     }
-public OnMapReadyCallback callback = new OnMapReadyCallback() {
+
+
+
+    public OnMapReadyCallback callback = new OnMapReadyCallback() {
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        getDeviceLocation();
-        GoogleMap map = googleMap;
-        LatLng sydney = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
-        if(googleMap != null){
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }
 
+        map = googleMap;
+
+            LatLng sydney = new LatLng(updateLet,updateLong);
+            map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         if (CheckPermission()) {
 
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             } else {
-
                 map.setMyLocationEnabled(true);
-
             }
         }
     }
@@ -337,52 +325,16 @@ public OnMapReadyCallback callback = new OnMapReadyCallback() {
 
     }
 
-    private void getLocationUpdate() {
-
-    }
 
 
 
-    private LocationRequest getLocationRequest() {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(60000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setFastestInterval(300000);
-        return locationRequest;
-    }
 
 
 
-   public LocationCallback locationcallback = new LocationCallback() {
-       @Override
-       public void onLocationResult(LocationResult locationResult) {
-           super.onLocationResult(locationResult);
-           for (Location location : locationResult.getLocations()) {
-               if (location == null) {
 
-                   return;
-               }
-
-
-
-               Toast.makeText(getContext(), ""+updateLet, Toast.LENGTH_SHORT).show();
-
-
-               Map<String, Object> locUpdate = new HashMap<>();
-
-               locUpdate.put("currentLocLati", updateLet);
-               locUpdate.put("currentLocLong", updateLong);
-
-           }
-           }
-       };
 
 
     private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationClient.getLastLocation();
@@ -394,18 +346,64 @@ public OnMapReadyCallback callback = new OnMapReadyCallback() {
                             lastKnownLocation = task.getResult();
                             try {
                                 if (lastKnownLocation != null) {
-//                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-//                                        new LatLng(lastKnownLocation.getLatitude(),
-//                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-
                                     updateLet = lastKnownLocation.getLatitude();
                                     updateLong = lastKnownLocation.getLongitude();
-                                    Toast.makeText(getContext(), "Location" + lastKnownLocation.getLatitude(), Toast.LENGTH_SHORT).show();
+
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(lastKnownLocation.getLatitude(),
+                                                    lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                    map.addMarker(new MarkerOptions().position(new LatLng(lastKnownLocation.getLatitude(),
+                                            lastKnownLocation.getLongitude())).title("Marker in Sydney"));
+                                    map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                                        @Override
+                                        public void onMapLongClick(LatLng latLng) {
+                                                map.clear();
+                                            marker = map.addMarker(new MarkerOptions()
+                                                    .position(
+                                                            new LatLng(latLng.latitude,
+                                                                    latLng.longitude))
+                                                    .draggable(true).visible(true));
+                                            updateLet = latLng.latitude;
+                                            updateLong=latLng.longitude;
+
+                                            Geocoder geo = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
+                                            List<Address> addresses = null;
+                                            try {
+                                                addresses = geo.getFromLocation(updateLet, updateLong, 1);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            if (addresses.isEmpty()) {
+                                                Toast.makeText(getContext(), "Waiting for Location", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else {
+                                                if (addresses.size() > 0) {
+                                                    gmapLocationViewText.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+                                                    map.getUiSettings().setZoomControlsEnabled(true);
+                                                    map.getUiSettings().setMapToolbarEnabled(true);
+                                                }
+                                            }
+                                        }
+                                    });
+                                    try {
+                                        Geocoder geo = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
+                                        List<Address> addresses = geo.getFromLocation(updateLet, updateLong, 1);
+                                        if (addresses.isEmpty()) {
+                                            Toast.makeText(getContext(), "Waiting for Location", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+                                            if (addresses.size() > 0) {
+                                                gmapLocationViewText.setText(addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " + addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName());
+                                            }
+                                        }
+                                    }
+                                    catch (Exception e) {
+                                        e.printStackTrace(); // getFromLocation() may sometimes fail
+                                    }
                                 }
                              else{
                                 Log.d(TAG, "Current location is null. Using defaults.");
                                 Log.e(TAG, "Exception: %s", task.getException());
-
                             }
                         } catch(Exception e){
                             e.printStackTrace();
@@ -413,18 +411,14 @@ public OnMapReadyCallback callback = new OnMapReadyCallback() {
                     }
                         }
                 });
+            }else {
+                Toast.makeText(getActivity(), "NotFound", Toast.LENGTH_SHORT).show();
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
-    public boolean chkGPSorNetworkEnabled() {
 
-        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        boolean isGPSEnabled;
-        return isGPSEnabled = locationManager.isProviderEnabled(locationManager.GPS_PROVIDER);
-    }
     private boolean CheckPermission() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -434,11 +428,7 @@ public OnMapReadyCallback callback = new OnMapReadyCallback() {
         return true;
     }
     private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
+
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {

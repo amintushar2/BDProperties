@@ -26,12 +26,11 @@ public interface RealStateApiServices {
     @POST("api/Owners/PostOwner")
     Call<Void>setOwnerDetails(@Body OwnerDetailsDataSet ownerDetailsDataSet);
 
-
     @GET("api/Property/Get?")
     Call<List<PropertySellRegistrationDataSet>>getPropertyLists(@Query("purpose") int purpose,@Query("status")int status);
+
     @GET("api/Owners/Get?")
     Call<OwnerDetailsDataSet>getOwnerDetails(@Query("email") String email);
-
 
     @Multipart
     @POST("api/Property/PostProperty")
@@ -54,12 +53,12 @@ public interface RealStateApiServices {
 //            @Part("Preference") RequestBody Preference
                                         );
 
-
     @GET("api/Data/GetPropertyType")
     Call<List<ProperyTypeList>>getPropertyTypes();
 
     @GET("api/Data/GetPropertyByType/{id}")
     Call<List<SubPropertyTypeList>>getSubPropertyTypes(@Path("id")int id);
+
     @GET("api/Data/GetArea")
     Call<List<AreasDataSetList>>getAreas();
 
