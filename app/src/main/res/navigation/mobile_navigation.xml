@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.bdproperties.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/ownerRegistrationForm"
+        android:name="com.example.bdproperties.ui.ownerregistrationfrom.OwnerRegistrationForm"
+        android:label="fragment_owner_registration_form"
+        tools:layout="@layout/fragment_owner_registration_form" />
+    <fragment
+        android:id="@+id/saleRegistrationFrom"
+        android:name="com.example.bdproperties.ui.saleregistrationfrom.SaleRegistrationFrom"
+        android:label="fragment_sale_registration_from"
+        tools:layout="@layout/fragment_sale_registration_from" />
+    <fragment
+        android:id="@+id/sellRegistrationFromFragment"
+        android:name="com.example.bdproperties.ui.saleregistrationfrom.SellRegistrationFromFragment"
+        android:label="SellRegistrationFromFragment" />
+    <fragment
+        android:id="@+id/sellWithMapsFragment"
+        android:name="com.example.bdproperties.ui.saleregistrationfrom.SellWithMapsFragment"
+        android:label="SellWithMapsFragment" />
+    <activity
+        android:id="@+id/uploadActivity"
+        android:name="com.example.bdproperties.ui.UploadActivity"
+        android:label="activity_upload"
+        tools:layout="@layout/activity_upload" />
+    <fragment
+        android:id="@+id/mapWithFragment"
+        android:name="com.example.bdproperties.MapWithFragment"
+        android:label="fragment_map_with"
+        tools:layout="@layout/fragment_map_with" />
+    <fragment
+        android:id="@+id/propertyDetailsFragment"
+        android:name="com.example.bdproperties.ui.propertydeatils.PropertyDetailsFragment"
+        android:label="fragment_property_details"
+        tools:layout="@layout/fragment_property_details" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.bdproperties.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.bdproperties.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
+
+</navigation>
