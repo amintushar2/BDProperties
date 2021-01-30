@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.bdpropertiesadmin"
+        applicationId "com.example.bdproperties"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
@@ -49,6 +49,7 @@ dependencies {
         force(true)
     }
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.1'

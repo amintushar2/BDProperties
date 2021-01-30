@@ -2,6 +2,7 @@ package com.example.bdproperties.services;
 
 import com.example.bdproperties.pojos.AreasDataSetList;
 import com.example.bdproperties.pojos.OwnerDetailsDataSet;
+import com.example.bdproperties.pojos.PropertyImages;
 import com.example.bdproperties.pojos.PropertySellRegistrationDataSet;
 import com.example.bdproperties.pojos.ProperyDetailsDataSets;
 import com.example.bdproperties.pojos.ProperyTypeList;
@@ -32,24 +33,28 @@ public interface RealStateApiServices {
     @GET("api/Owners/Get?")
     Call<OwnerDetailsDataSet>getOwnerDetails(@Query("email") String email);
 
+    @GET("api/Property/GetPropertyPhotos?")
+    Call<List<PropertyImages>>getPropertyImages(@Query("propertyId") int propertyId);
+
     @Multipart
     @POST("api/Property/PostProperty")
     Call<PropertySellRegistrationDataSet>setPropertyDetails(@Part MultipartBody.Part CoverPhoto,
             @Part("OwnerId") RequestBody OwnerId
+            ,
+            @Part("PropertyName") RequestBody PropertyName,
+            @Part("Area") RequestBody Area,
+            @Part("Address") RequestBody Address,
+            @Part("Longitude") RequestBody Longitude ,
+            @Part("Latitude") RequestBody Latitude,
+            @Part("SalePrice") RequestBody SalePrice,
+            @Part("SubPropertyType") RequestBody SubPropertyType,
+            @Part("BedRoom") RequestBody BedRoom,
+            @Part("WashRoom") RequestBody WashRoom,
+            @Part("Varanda") RequestBody Varanda,
+            @Part("DrawingRoom") Boolean DrawingRoom,
+            @Part("Parking ") Boolean Parking,
+            @Part("FloorLevel") RequestBody FloorLevel
 //            ,
-//            @Part("PropertyName") RequestBody PropertyName,
-//            @Part("Area") RequestBody Area,
-//            @Part("Address") RequestBody Address,
-//            @Part("Longitude ") RequestBody Longitude ,
-//            @Part("Latitude") RequestBody Latitude,
-//            @Part("SalePrice") RequestBody SalePrice,
-//            @Part("SubPropertyType") RequestBody SubPropertyType,
-//            @Part("BedRoom") RequestBody BedRoom,
-//            @Part("WashRoom") RequestBody WashRoom,
-//            @Part("Varanda") RequestBody Varanda,
-//            @Part("DrawingRoom") RequestBody DrawingRoom,
-//            @Part("Parking ") RequestBody Parking,
-//            @Part("FloorLevel") RequestBody FloorLevel,
 //            @Part("Preference") RequestBody Preference
                                         );
 
@@ -64,4 +69,16 @@ public interface RealStateApiServices {
 
     @GET("api/Property/GetById/{id}")
     Call<ProperyDetailsDataSets>getpropertyDetails(@Path("id")int id);
+
+    @Multipart
+    @POST("api/Property/PostPropertyPhotos")
+    Call<ResponseBody> uploadMultipleFiles(
+            @Part("propertyId") RequestBody propertyId,
+            @Part("details1") RequestBody details1,
+            @Part("details2") RequestBody details2,
+            @Part("details3") RequestBody details3,
+            @Part MultipartBody.Part photo,
+            @Part MultipartBody.Part photo1,
+            @Part MultipartBody.Part photo2);
+
 }

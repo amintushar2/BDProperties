@@ -3,6 +3,7 @@ package com.example.bdproperties.ui.saleregistrationfrom;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bdproperties.R;
+
+import com.example.bdproperties.fileutils.FileUtils;
 import com.example.bdproperties.pojos.PropertySellRegistrationDataSet;
 import com.example.bdproperties.services.ApiClient;
 import com.example.bdproperties.services.RealStateApiServices;
@@ -57,6 +60,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -75,27 +79,24 @@ import static android.app.Activity.RESULT_OK;
 
 public class MapWithFragment extends Fragment {
     private static final int LOCATION_REQUEST_CODE = 111;
-    private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationClient;
-    private LocationManager locationManager;
     double updateLet;
     double updateLong;
     private Location lastKnownLocation;
     private static final String TAG="!" ;
-    private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int DEFAULT_ZOOM = 15;
+    int propertysId ;
 
+    private int PICK_IMAGE_GALLERY_IMAGE=1;
+    String detailss1 = "File";
+    String details2 = "File";
+    String details3 = "File";
 
     private boolean locationPermissionGranted;
 
     private GoogleMap map;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
-    LocationRequest mLocationRequest;
 
 
-    private boolean isContinue = false;
-    private boolean isGPS = false;
     Marker marker;
 
     Button btnUpload, btnMulUpload, btnPickImage, btnPickVideo;
@@ -105,7 +106,10 @@ public class MapWithFragment extends Fragment {
     String[] mediaColumns = {MediaStore.Video.Media._ID};
     ProgressDialog progressDialog;
     TextView str1, str2;
-    int ownerId;
+    String filepath= "";
+    int ownerId,  subproperty  , bedroom , bathroom, varandha , buldingyear , floorlevel , area;
+    boolean parking , drawing;
+    String sellPrice, prpertyName, adress  ;
     PropertySellRegistrationDataSet propertySellRegistrationDataSet;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -127,9 +131,21 @@ public class MapWithFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_map_with, container, false);
 
+
         sharedPreferences = getActivity().getSharedPreferences("MyFref", 0);
         ownerId = sharedPreferences.getInt("OwnerId", 0);
-        sharedPreferences.getString("sellprice", "");
+        sellPrice = sharedPreferences.getString("sellprice", "");
+        prpertyName=sharedPreferences.getString("proepertyName","");
+        area= sharedPreferences.getInt("area",0);
+        adress =sharedPreferences.getString("adress","");
+        drawing=sharedPreferences.getBoolean("drwaing",true);
+        subproperty=sharedPreferences.getInt("subproperty", 0);
+        parking=sharedPreferences.getBoolean("parking", true);
+        bedroom=sharedPreferences.getInt("bedroom", 0);
+        bathroom=sharedPreferences.getInt("bathroom", 0);
+        varandha=sharedPreferences.getInt("varandha", 0);
+        buldingyear=sharedPreferences.getInt("buildingYear", 0);
+        floorlevel=sharedPreferences.getInt("floodLevel", 0);
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Uploading...");
 
@@ -144,14 +160,17 @@ public class MapWithFragment extends Fragment {
             CheckPermission();
         } else {
 
-
     }
-
 
         btnMulUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent =new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+                startActivityForResult(Intent.createChooser(intent,"Select "),PICK_IMAGE_GALLERY_IMAGE);
+                progressDialog.show();
             }
         });
 
@@ -168,11 +187,22 @@ public class MapWithFragment extends Fragment {
         updateLocationUI();
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
-
+        Toast.makeText(getContext(), ""+updateLong, Toast.LENGTH_SHORT).show();
         // Video must be low in Memory or need to be compressed before uploading...
         return  root;
     }
 
+
+    @NonNull
+    private RequestBody createRequestBody(String description){
+        return RequestBody.create(MultipartBody.FORM,description);
+    }
+    @NonNull
+    private MultipartBody.Part prepareMultipart(String path , Uri fileUri){
+        File file = FileUtils.getFile(getContext(),fileUri);
+        RequestBody requestBody =RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(fileUri)),file);
+        return MultipartBody.Part.createFormData(path,file.getName(),requestBody);
+    }
     private void updateLocationUI() {
 
         if (map == null) {
@@ -216,24 +246,20 @@ public class MapWithFragment extends Fragment {
                 cursor.close();
                 uploadFile();
 
-            } // When an Video is picked
-            else if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
+            }
+            else if (requestCode == PICK_IMAGE_GALLERY_IMAGE && resultCode == RESULT_OK && null != data) {
+                ClipData clipData = data.getClipData();
+                ArrayList<Uri>files = new ArrayList<Uri>();
+                for (int i =0 ; i<clipData.getItemCount();i++){
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Uri uri =item.getUri();
+                    files.add(uri);
+                }
+                progressDialog.show();
+                uploadAlbumFile(files.get(0),files.get(1),files.get(1));
+                Log.d("slction",files.toString());
 
-                // Get the Video from data
-                Uri selectedVideo = data.getData();
-                String[] filePathColumn = {MediaStore.Video.Media.DATA};
 
-                Cursor cursor =getActivity(). getContentResolver().query(selectedVideo, filePathColumn, null, null, null);
-                assert cursor != null;
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-
-                mediaPath1 = cursor.getString(columnIndex);
-                str2.setText(mediaPath1);
-                // Set the Video Thumb in ImageView Previewing the Media
-                //              imgView.setImageBitmap(getThumbnailPathForLocalFile(MainActivity.this, selectedVideo));
-                cursor.close();
 
             } else {
                 Toast.makeText(getContext(), "You haven't picked Image/Video", Toast.LENGTH_LONG).show();
@@ -243,6 +269,31 @@ public class MapWithFragment extends Fragment {
         }
 
     }
+
+    private void uploadAlbumFile(Uri uri, Uri uri1, Uri uri2) {
+        RealStateApiServices realStateApiServices = ApiClient.getClient().create(RealStateApiServices.class);
+        RequestBody propertyId = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(propertysId));
+        RequestBody details1 = RequestBody.create(MediaType.parse("text/plain"), details2);
+        RequestBody details2 = RequestBody.create(MediaType.parse("text/plain"), details3);
+        RequestBody details3 = RequestBody.create(MediaType.parse("text/plain"),detailss1 );
+
+        Call<ResponseBody>call = realStateApiServices.uploadMultipleFiles(propertyId,details1,details2,details3,prepareMultipart("photo1",uri),
+                prepareMultipart("photo2",uri1),
+                prepareMultipart("photo3",uri2));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     // Providing Thumbnail For Selected Image
     public Bitmap getThumbnailPathForLocalFile(Activity context, Uri fileUri) {
@@ -262,25 +313,41 @@ public class MapWithFragment extends Fragment {
     }
 
     private void uploadFile() {
-        progressDialog.show();
 
+        progressDialog.show();
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(mediaPath);
-
         // Parsing any Media type file
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part CoverPhoto = MultipartBody.Part.createFormData("CoverPhoto", file.getName(), requestBody);
         RequestBody OwnerId = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(ownerId));
+        RequestBody PrpertyName = RequestBody.create(MediaType.parse("text/plain"), prpertyName);
+        RequestBody adresse = RequestBody.create(MediaType.parse("text/plain"),adress );
+        RequestBody areas = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(area));
+        RequestBody sellProce = RequestBody.create(MediaType.parse("text/plain"), sellPrice);
+        RequestBody bedRoom = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(bedroom));
+        RequestBody subProperty = RequestBody.create(MediaType.parse("text/plain"),String.valueOf(subproperty));
+        RequestBody bathrooms = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(bathroom));
+        RequestBody Varandha = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(varandha));
+        Boolean drawingDinigInt = drawing;
+        Boolean Parking = parking;
+        RequestBody buildYear = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(buldingyear));
+        RequestBody floorLevel = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(floorlevel));
+        RequestBody latitude = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(updateLet));
+        RequestBody langitutued = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(updateLong));
         RealStateApiServices appApiClient = ApiClient.getClient().create(RealStateApiServices.class);
 
-        Call<PropertySellRegistrationDataSet> call = appApiClient.setPropertyDetails(CoverPhoto,OwnerId);
+        Call<PropertySellRegistrationDataSet> call = appApiClient.setPropertyDetails(CoverPhoto,OwnerId,PrpertyName,areas,adresse,langitutued,latitude,sellProce,subProperty
+        ,bedRoom,bathrooms,Varandha,drawingDinigInt,Parking,floorLevel);
         call.enqueue(new Callback<PropertySellRegistrationDataSet>() {
             @Override
             public void onResponse(Call<PropertySellRegistrationDataSet> call, Response<PropertySellRegistrationDataSet> response) {
+                PropertySellRegistrationDataSet propertySellRegistrationDataSet;
                 progressDialog.dismiss();
-               PropertySellRegistrationDataSet propertySellRegistrationDataSet = response.body();
+                propertySellRegistrationDataSet = response.body();
+                propertysId =propertySellRegistrationDataSet.getId();
+                Log.d("OnReq",propertySellRegistrationDataSet.toString());
 
-                Toast.makeText(getContext(), ""+propertySellRegistrationDataSet.getId(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -290,14 +357,11 @@ public class MapWithFragment extends Fragment {
         });
     }
 
-
-
     public OnMapReadyCallback callback = new OnMapReadyCallback() {
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        map = googleMap;
-
+            map = googleMap;
             LatLng sydney = new LatLng(updateLet,updateLong);
             map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -313,7 +377,6 @@ public class MapWithFragment extends Fragment {
     }
 };
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -324,15 +387,6 @@ public class MapWithFragment extends Fragment {
         }
 
     }
-
-
-
-
-
-
-
-
-
 
     private void getDeviceLocation() {
         try {
@@ -348,7 +402,6 @@ public class MapWithFragment extends Fragment {
                                 if (lastKnownLocation != null) {
                                     updateLet = lastKnownLocation.getLatitude();
                                     updateLong = lastKnownLocation.getLongitude();
-
                                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                             new LatLng(lastKnownLocation.getLatitude(),
                                                     lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -357,7 +410,7 @@ public class MapWithFragment extends Fragment {
                                     map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                                         @Override
                                         public void onMapLongClick(LatLng latLng) {
-                                                map.clear();
+                                            map.clear();
                                             marker = map.addMarker(new MarkerOptions()
                                                     .position(
                                                             new LatLng(latLng.latitude,

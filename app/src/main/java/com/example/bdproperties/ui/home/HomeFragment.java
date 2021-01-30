@@ -124,7 +124,6 @@ public class HomeFragment extends Fragment {
                         subPropertyTypeLists= response.body();
                         subPropertyTypeListsdataShow();
                     }
-
                     @Override
                     public void onFailure(Call<List<SubPropertyTypeList>> call, Throwable t) {
 
@@ -160,8 +159,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void subPropertyTypeListsdataShow() {
-
-
         String[] SubPropety = new String[subPropertyTypeLists.size()];
 
         for(int i=0; i<subPropertyTypeLists.size(); i++){

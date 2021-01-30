@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
             currentUser =  FirebaseAuth.getInstance().getCurrentUser();
             updateUI(currentUser);
 
+            if (currentUser!=null){
+                navigationView.getMenu().findItem(R.id.ownerRegistrationForm).setVisible(false);
+            }else {
+                navigationView.getMenu().findItem(R.id.ownerRegistrationForm).setVisible(true);
+            }
 
 
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

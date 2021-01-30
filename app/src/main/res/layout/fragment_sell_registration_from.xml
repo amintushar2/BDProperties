@@ -71,12 +71,14 @@
             android:id="@+id/textInputLayout7"
             android:layout_width="0dp"
             android:layout_height="48dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             app:hintEnabled="false"
+            
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout73"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +89,7 @@
                 android:id="@+id/areaAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:hint="Select Your Area" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,13 +152,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-
                 android:layout_marginRight="10dp"
                 app:hintEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/textInputLayout22"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+
                 app:startIconDrawable="@drawable/ic_baseline_date_range_24">
 
                 <AutoCompleteTextView
@@ -163,6 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Property "
+                    android:textSize="14sp"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -185,6 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Sub Property"
+                    android:textSize="14sp"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -285,7 +290,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="DrawingDining"
-                    android:inputType="number"
                     android:textSize="12sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -363,7 +367,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Flat Size (sq/ft)"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -385,7 +389,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Build Year"
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -421,8 +425,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Floor Level"
-
-                    android:inputType="textPersonName" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

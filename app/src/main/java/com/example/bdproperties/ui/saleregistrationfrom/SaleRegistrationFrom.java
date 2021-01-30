@@ -1,5 +1,6 @@
 package com.example.bdproperties.ui.saleregistrationfrom;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,7 +21,9 @@ public class SaleRegistrationFrom extends Fragment {
 
     RadioButton rentRadioButton,selectRadioButton;
     RadioGroup radioGroup;
-
+    int purposeID =1 ;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     public SaleRegistrationFrom() {
         // Required empty public constructor
     }
@@ -36,6 +39,11 @@ public class SaleRegistrationFrom extends Fragment {
         selectRadioButton=view.findViewById(R.id.sellRadioButton);
         radioGroup =view.findViewById(R.id.radioGroup);
         selectRadioButton.setChecked(true);
+        preferences =this.getContext().getSharedPreferences("MyFref",0);
+        //  preferences = getActivity().getSharedPreferences("MyFref", 0);
+        editor =preferences.edit();
+        editor.putInt("purpose",purposeID);
+
         FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
         ft1.replace(R.id.fragmentReplace, new SellRegistrationFromFragment());
         ft1.commit();
@@ -45,18 +53,21 @@ public class SaleRegistrationFrom extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rentRadioButton:
-                        Toast.makeText(getContext(), "RRRR", Toast.LENGTH_SHORT).show();
-                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.fragmentReplace, new Rent());
-                        ft.commit();
+                       purposeID =2;
+                       editor.putInt("purpose",purposeID);
+                       editor.apply();
 
-
+                        FragmentTransaction ft2 = getActivity().getSupportFragmentManager().beginTransaction();
+                        ft2.replace(R.id.fragmentReplace, new SellRegistrationFromFragment());
+                        ft2.commit();
                         break;
                     case R.id.sellRadioButton:
+                        purposeID = 1;
+                        editor.putInt("purpose",purposeID);
+                        editor.apply();
                         FragmentTransaction ft1 = getActivity().getSupportFragmentManager().beginTransaction();
                         ft1.replace(R.id.fragmentReplace, new SellRegistrationFromFragment());
                         ft1.commit();
-                        break;
                 }
             }
         });

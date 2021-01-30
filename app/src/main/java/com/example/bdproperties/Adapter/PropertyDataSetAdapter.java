@@ -47,17 +47,20 @@ List<PropertySellRegistrationDataSet>propertySellRegistrationDataSets;
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull PropertyDataSetAdapterViewHolder holder, int position) {
-        holder.propertyNameTextView.setText(String.valueOf(propertySellRegistrationDataSets.get(position).getAddress()));
+        holder.propertyNameTextView.setText(String.valueOf(propertySellRegistrationDataSets.get(position).getPropertyName()));
         holder.propertyAdressView.setText(String.valueOf(propertySellRegistrationDataSets.get(position).getAddress()));
         holder.propertyPriceView.setText(propertySellRegistrationDataSets.get(position).getSalePrice().toString());
+        holder.propertyDetailsView.setText("BedRoom : "+propertySellRegistrationDataSets.get(position).getBedRoom()+" | WasrRoom" +propertySellRegistrationDataSets.get(position).getWashRoom());
         String coverImageUrlS = propertySellRegistrationDataSets.get(position).getCoverUrl().substring(2);
         Picasso.get().load(ApiClient.BASE_URL+coverImageUrlS).resize(200,250).centerCrop().into(holder.coverImageView);
-        Toast.makeText(context, ""+propertySellRegistrationDataSets.get(position).getCoverUrl(), Toast.LENGTH_SHORT).show();
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("propertyID",propertySellRegistrationDataSets.get(position).getId());
+                bundle.putDouble("lattitude", Double.parseDouble(propertySellRegistrationDataSets.get(position).getLatitude()));
+                bundle.putDouble("langitute", Double.parseDouble(propertySellRegistrationDataSets.get(position).getLatitude()));
                 NavController navController = Navigation.findNavController((Activity) context, R.id.nav_host_fragment);
                 navController.navigate(R.id.propertyDetailsFragment,bundle);
             }

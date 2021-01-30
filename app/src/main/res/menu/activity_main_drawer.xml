@@ -11,14 +11,32 @@
         <item
             android:id="@+id/ownerRegistrationForm"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Registration" />
+            android:title="Log/SginUp" />
         <item
             android:id="@+id/saleRegistrationFromMenu"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:title="Post Your Property" />
         <item
-            android:id="@+id/mapsFragment"
+            android:id="@+id/requirmentBTn"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:title="Requirment" />
+    </group>
+
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/propertyMEasurment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Property Mesurment" />
+        <item
+            android:id="@+id/faq"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="FAQ" />
+        <item
+            android:id="@+id/aboutUs"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Contact Us" />
+
     </group>
 </menu>

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView5"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
     app:layout_constraintBottom_toTopOf="@+id/createAccountBtn"
@@ -12,338 +12,390 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:context=".ui.propertydeatils.PropertyDetailsFragment">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <!-- TODO: Update blank fragment layout -->
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/imageViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        app:layout_constraintBottom_toTopOf="@+id/properDetailsName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/properDetailsName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ProperpertyName"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/imageViewPager"
-        tools:layout_editor_absoluteX="182dp"
-        tools:layout_editor_absoluteY="182dp" />
-
-    <TableLayout
-        android:id="@+id/tavle1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/properDetailsName"
-        android:padding="4dp"
-        tools:layout_editor_absoluteX="0dp">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-
-            >
-
-            <TextView
-                android:id="@+id/areaTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Area:"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/areasetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dhaka" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-
-            <TextView
-                android:id="@+id/addressTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Address :"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-
-            <TextView
-                android:id="@+id/aAddressetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="267/4, Dhanmodi"
-                />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/propetyTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PropertyType :"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/propertysetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Room" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/bedRoomTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BedRoom"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/bedRoomsetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/bathrromTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="WashRoom"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/bathRoomsetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2" />
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/bvarandaTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="WashRoom"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/varandasetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/drawingaTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Drawing and Dining"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/drawingsetTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Yes" />
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/ParkingTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parking"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/dparkingTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Yes" />
-        </TableRow>
-    </TableLayout>
-    <TableLayout
-        android:id="@+id/table2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tavle1"
-        android:padding="4dp"
-        tools:layout_editor_absoluteX="0dp">
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/oenerNameTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Owner Name            "
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/ownerNamweTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Owner Name " />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp">
-            <TextView
-                android:id="@+id/oenerMobileTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Contact Number     "
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginRight="20dp"/>
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginRight="20dp"/>
-            <TextView
-                android:id="@+id/ownerMobileTableRaw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="01623630672 " />
-        </TableRow>
-
-    </TableLayout>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mapFragmentView"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table2"
-        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapFragmentView">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/button"
+        <!-- TODO: Update blank fragment layout -->
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/imageViewPager"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            app:layout_constraintBottom_toTopOf="@+id/properDetailsName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <LinearLayout
+            android:id="@+id/mdots"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/properDetailsName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/properDetailsName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="ProperpertyName"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/tavle1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mdots" />
+
+        <TableLayout
+            android:id="@+id/tavle1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/table2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/properDetailsName">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+
+                >
+
+                <TextView
+                    android:id="@+id/areaTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Area:"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/areasetTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dhaka" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/addressTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Address :"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/aAddressetTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="267/4, Dhanmodi" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/propetyTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="PropertyType :"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/propertysetTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Room" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/bedRoomTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="BedRoom"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/bedRoomsettTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/bathrromTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="WashRoom"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/bathRoomseTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/bvarandaTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Varanda"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/varandasetTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/drawingaTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Drawing and Dining"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/drawingsetTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yes" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/ParkingTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Parking"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/dparkingTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yes" />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:id="@+id/table2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/mapFragmentView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tavle1">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/oenerNameTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Owner Name            "
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/ownerNamweTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner Name " />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:id="@+id/oenerMobileTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="Contact Number     "
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/ownerMobileTableRaw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01623630672 " />
+            </TableRow>
+
+        </TableLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapFragmentView"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/table2" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mapFragmentView">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
