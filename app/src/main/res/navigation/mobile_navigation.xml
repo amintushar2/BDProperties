@@ -11,7 +11,7 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/ownerRegistrationForm"
+        android:id="@+id/ownerRegistrationFormFillup"
         android:name="com.example.bdproperties.ui.ownerregistrationfrom.OwnerRegistrationForm"
         android:label="fragment_owner_registration_form"
         tools:layout="@layout/fragment_owner_registration_form" />
@@ -24,15 +24,6 @@
         android:id="@+id/sellRegistrationFromFragment"
         android:name="com.example.bdproperties.ui.saleregistrationfrom.SellRegistrationFromFragment"
         android:label="SellRegistrationFromFragment" />
-    <fragment
-        android:id="@+id/sellWithMapsFragment"
-        android:name="com.example.bdproperties.ui.saleregistrationfrom.SellWithMapsFragment"
-        android:label="SellWithMapsFragment" />
-    <activity
-        android:id="@+id/uploadActivity"
-        android:name="com.example.bdproperties.ui.UploadActivity"
-        android:label="activity_upload"
-        tools:layout="@layout/activity_upload" />
     <fragment
         android:id="@+id/mapWithFragment"
         android:name="com.example.bdproperties.ui.saleregistrationfrom.MapWithFragment"

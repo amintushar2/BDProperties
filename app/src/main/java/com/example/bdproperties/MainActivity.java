@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.ownerRegistrationForm, R.id.saleRegistrationFrom,R.id.uploadActivity,R.id.loginFragment)
+                R.id.nav_home, R.id.ownerRegistrationForm, R.id.saleRegistrationFrom,R.id.loginFragment,R.id.ownerRegistrationFormFillup,R.id.loginFragment,R.id.mapWithFragment)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -72,10 +72,14 @@ public class MainActivity extends AppCompatActivity {
                         if (currentUser!=null){
                             NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
                             navController.navigate(R.id.saleRegistrationFrom);
-                        }else{
+                        }else
+                            {
                             NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
                             navController.navigate(R.id.loginFragment);
                         }
+                    }if (item.getItemId()==R.id.ownerRegistrationForm){
+                        NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
+                        navController.navigate(R.id.loginFragment);
                     }
                     NavigationUI.onNavDestinationSelected(item,navController);
                     //This is for closing the drawer after acting on it

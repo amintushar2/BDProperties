@@ -61,7 +61,6 @@ public class SlideViewPager extends PagerAdapter {
 
         ImageView imageSlider = view.findViewById(R.id.imageView2);
         String filepathes =imageModelArrayList.get(position).getFilePath().substring(2);
-        Toast.makeText(context, "Image : "+ApiClient.BASE_URL+filepathes, Toast.LENGTH_SHORT).show();
         Picasso.get()
                 .load(ApiClient.BASE_URL+filepathes)
                 .fit().centerCrop()

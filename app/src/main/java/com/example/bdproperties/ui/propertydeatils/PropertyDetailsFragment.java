@@ -1,11 +1,14 @@
 package com.example.bdproperties.ui.propertydeatils;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import android.text.Html;
@@ -14,12 +17,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bdproperties.Adapter.SlideViewPager;
+import com.example.bdproperties.MainActivity;
 import com.example.bdproperties.R;
+import com.example.bdproperties.pojos.BookingPost;
+import com.example.bdproperties.pojos.OwnerDetailsDataSet;
 import com.example.bdproperties.pojos.PropertyImages;
 import com.example.bdproperties.pojos.ProperyDetailsDataSets;
 import com.example.bdproperties.pojos.SubPropertyTypeList;
@@ -31,6 +38,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +58,7 @@ public class PropertyDetailsFragment extends Fragment  {
     ProperyDetailsDataSets propertySellRegistrationDataSet;
     ProgressDialog progressDialog;
     String propertyName;
-
+    OwnerDetailsDataSet ownerDetailsDataSet;
     GoogleMap map;
     private LinearLayout mdots;
     double upLatLat,upLong;
@@ -59,6 +68,12 @@ public class PropertyDetailsFragment extends Fragment  {
     List<PropertyImages> propertyImagesList;
     ViewPager viewPager;
     SlideViewPager adapter ;
+    int ownerid;
+    Button BookingButton;
+    RealStateApiServices realStateApiServices;
+    FirebaseUser currentUser;
+    String emailAddress;
+
     public PropertyDetailsFragment() {
         // Required empty public constructor
     }
@@ -82,10 +97,10 @@ public class PropertyDetailsFragment extends Fragment  {
         drawingDinigDetails=view.findViewById(R.id.drawingsetTableRaw);
         parkingDetails=view.findViewById(R.id.dparkingTableRaw);
         aaAddressetTableRaw=view.findViewById(R.id.aAddressetTableRaw);
+        BookingButton = view.findViewById(R.id.bookingButton);
         progressDialog = new ProgressDialog(getContext());
         progressDialog = new ProgressDialog(getContext());
         mdots=view.findViewById(R.id.mdots);
-
         Bundle bundle =getArguments();
         propertyId= bundle.getInt("propertyID");
         upLatLat= bundle.getDouble("lattitude");
@@ -96,10 +111,14 @@ public class PropertyDetailsFragment extends Fragment  {
         timer.scheduleAtFixedRate(new MyTimerTask(),2000,4000);
         Toast.makeText(getContext(), ""+upLatLat, Toast.LENGTH_SHORT).show();
 
+        currentUser =  FirebaseAuth.getInstance().getCurrentUser();
+        updateUI(currentUser);
+
         progressDialog.show();
-        RealStateApiServices realStateApiServices = ApiClient.getClient().create(RealStateApiServices.class);
+        realStateApiServices = ApiClient.getClient().create(RealStateApiServices.class);
 
         realStateApiServices.getpropertyDetails(propertyId).enqueue(new Callback<ProperyDetailsDataSets>() {
+         @SuppressLint("SetTextI18n")
          @Override
          public void onResponse( Call<ProperyDetailsDataSets> call, Response<ProperyDetailsDataSets> response) {
 
@@ -112,7 +131,9 @@ public class PropertyDetailsFragment extends Fragment  {
              aaAddressetTableRaw.setText(propertySellRegistrationDataSet.getAddress());
              bedRoomDetails.setText(propertySellRegistrationDataSet.getBedRoom().toString());
              washRoomDetails.setText(propertySellRegistrationDataSet.getWashRoom().toString());
-             if (propertySellRegistrationDataSet.getDrawingRoom()==true ){
+
+
+             if ((propertySellRegistrationDataSet.getDrawingRoom() == true)){
                  drawingDinigDetails.setText("Yes");
              }else {
                  drawingDinigDetails.setText("No");
@@ -127,6 +148,9 @@ public class PropertyDetailsFragment extends Fragment  {
              upLong= Double.parseDouble(propertySellRegistrationDataSet.getLongitude());
              sydney = new LatLng(upLatLat,upLong);
              map.addMarker(new MarkerOptions().position(sydney).title(propertyName+"/n"));
+             map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                     new LatLng(upLatLat,
+                             upLong), 15));
              map.getUiSettings().setMapToolbarEnabled(true);
              map.getUiSettings().setAllGesturesEnabled(true);
              map.getUiSettings().setZoomControlsEnabled(true);
@@ -135,6 +159,8 @@ public class PropertyDetailsFragment extends Fragment  {
              map.getUiSettings().setScrollGesturesEnabled(true);
              map.getUiSettings().setTiltGesturesEnabled(true);
              map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(true);
+
+
          }
 
          @Override
@@ -165,10 +191,65 @@ public class PropertyDetailsFragment extends Fragment  {
             }
         });
             showImageFile();
+
+
+
+            BookingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentUser ==null){
+                        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+                        navController.navigate(R.id.loginFragment);
+                    }else {
+                        postBooking(createBookingPost());
+                    }
+                }
+            });
         return  view;
     }
-    private void setDataProperties() {
 
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser!=null){
+            emailAddress =currentUser.getEmail();
+            userIdget();
+        }
+    }
+
+    private void userIdget() {
+        realStateApiServices = ApiClient.getClient().create(RealStateApiServices.class);
+        realStateApiServices.getOwnerDetails(emailAddress).enqueue(new Callback<OwnerDetailsDataSet>() {
+            @Override
+            public void onResponse(Call<OwnerDetailsDataSet> call, Response<OwnerDetailsDataSet> response) {
+                if (response.isSuccessful()){
+                    ownerDetailsDataSet =response.body();
+                    ownerid = ownerDetailsDataSet.getId();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OwnerDetailsDataSet> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void postBooking(BookingPost bookingPost) {
+        realStateApiServices = ApiClient.getClient().create(RealStateApiServices.class);
+        Call<Void>call = realStateApiServices.setBookingPost(bookingPost);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+            if (response.isSuccessful()){
+                Toast.makeText(getContext(), "Booked Your Property", Toast.LENGTH_SHORT).show();
+            }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
 
 
     }
@@ -278,6 +359,15 @@ public class PropertyDetailsFragment extends Fragment  {
             }
 
         }
+    }
+
+
+    public BookingPost createBookingPost(){
+        BookingPost bookingPost = new BookingPost();
+        bookingPost.setOwnerId(ownerid);
+        bookingPost.setPropertyId(propertyId);
+        return bookingPost;
+
     }
     }
 

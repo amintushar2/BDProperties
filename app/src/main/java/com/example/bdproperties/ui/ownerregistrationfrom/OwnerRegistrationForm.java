@@ -93,7 +93,6 @@ public class OwnerRegistrationForm extends Fragment {
 
     private void upadteUI(FirebaseUser user) {
         if (mAuth.getCurrentUser() != null) {
-
             Toast.makeText(getContext(), ""+user.getEmail(), Toast.LENGTH_SHORT).show();
             saveOwnerData(createOwnerDetails());
         }else{
@@ -112,7 +111,7 @@ public class OwnerRegistrationForm extends Fragment {
                     bundle.putString("email",
                             emaailEditText.getText().toString());
                     NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-                    navController.navigate(R.id.sellRegistrationFromFragment,bundle);
+                    navController.navigate(R.id.nav_home,bundle);
                     Toast.makeText(getContext(), "Update", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -166,7 +165,7 @@ public class OwnerRegistrationForm extends Fragment {
         ownerDetailsDataSet.setMobile(mobilePhoneEditText.getText().toString());
         ownerDetailsDataSet.setDOB(dateofbirthEditText.getText().toString());
         ownerDetailsDataSet.setPassword(passwordViewText.getText().toString());
-
         return ownerDetailsDataSet;
+
     }
 }

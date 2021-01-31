@@ -63,6 +63,7 @@ public class SellRegistrationFromFragment extends Fragment  {
     int purposeID;
     RealStateApiServices realStateApiServices;
     OwnerDetailsDataSet propertySellRegistrationDataSet;
+
     public SellRegistrationFromFragment() {
         // Required empty public constructor
     }
@@ -80,8 +81,6 @@ public class SellRegistrationFromFragment extends Fragment  {
         View view =  inflater.inflate(R.layout.fragment_sell_registration_from, container, false);
         preferences = getActivity().getSharedPreferences("MyFref", 0);
         purposeID = preferences.getInt("purpose", 0);
-
-
         propertyNameField = view.findViewById(R.id.propertyTitleEDT);
         sellpriceField = view.findViewById(R.id.sellingPriceEdt);
         areaField = view.findViewById(R.id.areaAutoComplete);
@@ -107,8 +106,6 @@ public class SellRegistrationFromFragment extends Fragment  {
 
         Toast.makeText(getContext(), "ID = "+emailAddress, Toast.LENGTH_SHORT).show();
 
-
-        Toast.makeText(getContext(), ""+parkingId, Toast.LENGTH_SHORT).show();
 
         realStateApiServices = ApiClient.getClient().create(RealStateApiServices.class);
 
@@ -146,8 +143,6 @@ public class SellRegistrationFromFragment extends Fragment  {
                     savedDataSellRegistration(createProperty());
                 }
 
-//                Intent intent = new Intent(getContext(), UploadActivity.class);
-//                startActivity(intent);
             }
         });
         showPropertyList();
@@ -182,7 +177,6 @@ public class SellRegistrationFromFragment extends Fragment  {
 
     private void showAreaSpiner() {
         String[] LOCATIONS = new String[areasDataSetList.size()];
-
         for(int i=0; i<areasDataSetList.size(); i++){
             //Storing names to string array
             LOCATIONS[i] = areasDataSetList.get(i).getArea1();

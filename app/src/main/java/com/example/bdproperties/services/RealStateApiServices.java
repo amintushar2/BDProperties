@@ -1,6 +1,7 @@
 package com.example.bdproperties.services;
 
 import com.example.bdproperties.pojos.AreasDataSetList;
+import com.example.bdproperties.pojos.BookingPost;
 import com.example.bdproperties.pojos.OwnerDetailsDataSet;
 import com.example.bdproperties.pojos.PropertyImages;
 import com.example.bdproperties.pojos.PropertySellRegistrationDataSet;
@@ -80,5 +81,10 @@ public interface RealStateApiServices {
             @Part MultipartBody.Part photo,
             @Part MultipartBody.Part photo1,
             @Part MultipartBody.Part photo2);
+
+
+
+    @POST("api/Booking/Post")
+    Call<Void>setBookingPost(@Body BookingPost bookingPost);
 
 }
