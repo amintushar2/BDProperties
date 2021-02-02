@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,17 +38,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
-    AutoCompleteTextView categoryAutoCompleteTextView,subCategoryAutoCompleteTextView,areaAutoCompleteText;
+    AutoCompleteTextView categoryAutoCompleteTextView,subCategoryAutoCompleteTextView,areaAutoCompleteText,maximumprice, minimumPrice;
+
     RecyclerView recyclerView;
     PropertyDataSetAdapter propertyDataSetAdapter;
     List <PropertySellRegistrationDataSet> propertySellRegistrationDataSetList;
     List<ProperyTypeList> properyTypeList;
     List<SubPropertyTypeList> subPropertyTypeLists;
-    int propertyId;
+    int propertyId,subPropertyId;
+    ImageButton searchButton;
     ProgressDialog progressDialog;
     List<AreasDataSetList> areasDataSetList;
     int activeStatuse= 2;
     int pupose = 1;
+    String maximumpriceText ,minimumpriceText;
 
     public HomeFragment() {
     }
@@ -58,6 +62,10 @@ public class HomeFragment extends Fragment {
         subCategoryAutoCompleteTextView=root.findViewById(R.id.subcategory);
         recyclerView= root.findViewById(R.id.listRecyclerView);
         areaAutoCompleteText= root.findViewById(R.id.locations);
+        maximumprice= root.findViewById(R.id.maximumPrice);
+        minimumPrice= root.findViewById(R.id.minimumprice);
+        searchButton= root.findViewById(R.id.searchButton);
+
         propertySellRegistrationDataSetList = new ArrayList<>();
         properyTypeList = new ArrayList<>();
         subPropertyTypeLists = new ArrayList<>();
@@ -74,6 +82,13 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(propertyDataSetAdapter);
 
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSearching();
+            }
+        });
 
         Call<List<ProperyTypeList>> propertytypecall = realStateApiServices.getPropertyTypes();
         propertytypecall.enqueue(new Callback<List<ProperyTypeList>>() {
@@ -113,6 +128,12 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        subCategoryAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                subPropertyId =subPropertyTypeLists.get(position).getId();
+            }
+        });
         categoryAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -122,6 +143,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<SubPropertyTypeList>> call, Response<List<SubPropertyTypeList>> response) {
                         subPropertyTypeLists= response.body();
+                        subCategoryAutoCompleteTextView.setText("");
                         subPropertyTypeListsdataShow();
                     }
                     @Override
@@ -156,6 +178,36 @@ public class HomeFragment extends Fragment {
 
         return root;
 
+    }
+
+    private void setSearching() {
+        String subCat = subCategoryAutoCompleteTextView.getText().toString();
+        String areaCat = areaAutoCompleteText.getText().toString();
+        String maxCat = maximumprice.getText().toString();
+        String minCat = minimumPrice.getText().toString();
+        if (!subCat.isEmpty()){
+            callBySubCatagory();
+           Toast.makeText(getContext(), ""+subCat, Toast.LENGTH_SHORT).show();
+        }else if (!areaCat.isEmpty()){
+            callbyArea();
+            Toast.makeText(getContext(), ""+areaAutoCompleteText.getText().toString().trim(), Toast.LENGTH_SHORT).show();
+        }else if (!maxCat.isEmpty()||!minCat.isEmpty()){
+            callByAreaMaxMinPrice();
+
+            Toast.makeText(getContext(), "mnm:"+minCat+"max"+maxCat, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getContext(), "Please Select Any cat", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void callByAreaMaxMinPrice() {
+
+    }
+
+    private void callbyArea() {
+    }
+
+    private void callBySubCatagory() {
     }
 
     private void subPropertyTypeListsdataShow() {

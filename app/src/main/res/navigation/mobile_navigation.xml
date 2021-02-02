@@ -44,5 +44,10 @@
         android:name="com.example.bdproperties.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/verifyPhoneNumberFragment"
+        android:name="com.example.bdproperties.ui.login.VerifyPhoneNumberFragment"
+        android:label="fragment_verify_phone_number"
+        tools:layout="@layout/fragment_verify_phone_number" />
 
 </navigation>

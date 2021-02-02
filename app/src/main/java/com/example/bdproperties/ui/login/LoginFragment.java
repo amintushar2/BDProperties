@@ -35,7 +35,7 @@ public class LoginFragment extends Fragment {
     FirebaseAuth myAppAuth;
     EditText usernameEditText ;
     EditText passwordEditText ;
-    Button loginButton ;
+    Button loginButton ,createButton;
     ProgressBar loadingProgressBar ;
 
     public LoginFragment() {
@@ -49,12 +49,11 @@ public class LoginFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_login, container, false);
         usernameEditText = view.findViewById(R.id.username);
-       passwordEditText = view.findViewById(R.id.password);
+        passwordEditText = view.findViewById(R.id.password);
         loginButton = view.findViewById(R.id.login);
         loadingProgressBar = view.findViewById(R.id.loading);
+        createButton = view.findViewById(R.id.button2);
         myAppAuth = FirebaseAuth.getInstance();
-
-
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +72,17 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String emailText = usernameEditText.getText().toString();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("mobielNo",
+//                        emailText);
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+                navController.navigate(R.id.ownerRegistrationFormFillup);
+            }
+        });
         return view;
     }
 
@@ -83,7 +93,6 @@ public class LoginFragment extends Fragment {
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if(task.isSuccessful()){
-
                     NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
                     navController.navigate(R.id.saleRegistrationFrom);
                     Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();

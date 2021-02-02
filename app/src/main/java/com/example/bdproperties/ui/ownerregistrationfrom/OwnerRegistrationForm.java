@@ -11,6 +11,8 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.example.bdproperties.R;
@@ -20,21 +22,40 @@ import com.example.bdproperties.services.RealStateApiServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OwnerRegistrationForm extends Fragment {
-    TextInputEditText confirmpass,personNameEditText,mobilePhoneEditText,nidEditText,dateofbirthEditText,emaailEditText,genderEditText,passwordViewText;
+    TextInputLayout dateofBirth;
+    AutoCompleteTextView confirmpass,personNameEditText,mobilePhoneEditText,nidEditText,dateofbirthEditText,emaailEditText,genderEditText,passwordViewText;
     MaterialButton createOwnerButton;
+    CheckBox agrementCheckBox;
 
+    String personname ;
+    String mobileNo ;
+    String emailid ;
+    String comPass,gender,dOb ;
     private FirebaseAuth mAuth;
-
+    MaterialDatePicker.Builder materialDateBuilder;
     public OwnerRegistrationForm() {
         // Required empty public constructor
     }
@@ -50,12 +71,45 @@ public class OwnerRegistrationForm extends Fragment {
         mobilePhoneEditText=view.findViewById(R.id.mobilenoEdt);
         nidEditText=view.findViewById(R.id.ownerNId);
         dateofbirthEditText=view.findViewById(R.id.ownerDateBirth);
+        dateofBirth =view.findViewById(R.id.textInputLayout2);
         emaailEditText=view.findViewById(R.id.emailEdt);
         createOwnerButton=view.findViewById(R.id.createAccountBtn);
-        passwordViewText=view.findViewById(R.id.passwordEdt);
-        confirmpass=view.findViewById(R.id.confirmPassword);
-
         genderEditText=view.findViewById(R.id.gender);
+        agrementCheckBox=view.findViewById(R.id.termsConditionCheck);
+        personname = personNameEditText.getText().toString();
+        mobileNo = mobilePhoneEditText.getText().toString();
+        emailid = emaailEditText.getText().toString();
+        gender = genderEditText.getText().toString();
+        dOb = dateofbirthEditText.getText().toString();
+        materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+
+        MaterialDatePicker  materialDatePicker = materialDateBuilder.build();
+
+        final Calendar cldr = Calendar.getInstance();
+        cldr.clear();
+        long today = cldr.getTimeInMillis();
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+        constraintsBuilder.setValidator(DateValidatorPointForward.now());
+        constraintsBuilder.setEnd(today);
+
+
+        materialDateBuilder.setCalendarConstraints(constraintsBuilder.build());
+
+
+        dateofBirth.setStartIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                materialDatePicker.show(getActivity().getSupportFragmentManager(),"DatePCiker");
+            }
+        });
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                dateofbirthEditText.setText(materialDatePicker.getHeaderText());
+            }
+        });
+
+
         createOwnerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,9 +117,12 @@ public class OwnerRegistrationForm extends Fragment {
                 boolean bol = checkValidation();
 
                 if (bol == false) {
-                    String emailid = emaailEditText.getText().toString();
-                    String password1 = passwordViewText.getText().toString();
-                    registerUser(emailid, password1);
+                    String phoneNumber = mobilePhoneEditText.getText().toString();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("mobielNo.",
+                            phoneNumber);
+                    NavController navController = Navigation.findNavController(getActivity(), R.id.verifyPhoneNumberFragment);
+                    navController.navigate(R.id.nav_home,bundle);
                 }
 
 
@@ -117,7 +174,6 @@ public class OwnerRegistrationForm extends Fragment {
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
 
@@ -127,13 +183,10 @@ public class OwnerRegistrationForm extends Fragment {
 
     }
     Boolean checkValidation() {
-       String personname = personNameEditText.getText().toString();
-       String emailid = emaailEditText.getText().toString();
-       String password1 = passwordViewText.getText().toString();
-        String comPass = confirmpass.getText().toString();
+
 
         Boolean flag = false;
-        if (personname.isEmpty() || emailid.isEmpty() || password1.isEmpty() || comPass.isEmpty()) {
+        if (personname.isEmpty() || emailid.isEmpty() || mobileNo.isEmpty() || comPass.isEmpty()) {
             Toast.makeText(getContext(), "Filup Info.", Toast.LENGTH_SHORT).show();
             flag = true;
             personNameEditText.setError("Enter Name");
@@ -144,14 +197,13 @@ public class OwnerRegistrationForm extends Fragment {
             emaailEditText.setError("Enter valid Id");
             flag = true;
         }
-        if (password1.length() < 8) {
+        if (mobileNo.length() < 11) {
             passwordViewText.setError("At Least 8 Charecter");
             flag = true;
 
         }
-        if (!password1.equals(comPass)) {
-            flag = true;
-            confirmpass.setError("Please Enter Same Pass");
+        if (!agrementCheckBox.isChecked()){
+            Toast.makeText(getContext(), "Please Agree Our Terms and Conditions", Toast.LENGTH_SHORT).show();
         }
         return flag;
     }
